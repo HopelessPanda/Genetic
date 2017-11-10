@@ -3,6 +3,12 @@
 
 using namespace std;
 
+enum {
+    SMALLER = -1,
+    EQUAL = 0 ,
+    BIGGER = 1,
+};
+
 struct job {
 	int id;
 	int length;
@@ -41,6 +47,7 @@ private:
     citizen create_offspring(citizen a, citizen b);
     citizen find_best_fitness(vector<citizen> population);
     void mutate(vector<citizen> population);
+    int compare_citizen(citizen a, citizen b);
 
 	vector<job> job_pool;
     citizen result;
