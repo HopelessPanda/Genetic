@@ -199,7 +199,7 @@ void GeneticScheduler::print_result()
         cout << "   " << i->id << " " << i->length << endl;
     } */
 
-    cout << endl << "Optimal schedule on " << nProcs << " processors: \n";
-    if (result.schedule != NULL) print_schedule(result.schedule);
-    cout << "Time required:\n" << result.fitness << endl << endl;
+    cout << endl << "Optimal schedule for " << nJobs << " jobs and " << nProcs << " processors: \n";
+    //if (result.schedule != NULL) print_schedule(result.schedule);
+    cout << "Time required:\n" << result.fitness << endl;
 }

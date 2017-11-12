@@ -16,19 +16,19 @@ void GeneticScheduler::create_optimal_time_schedule() {
     citizen global_best;
     int count = 0;
 
-    if(!create_population(population))
+    if (!create_population(population))
         return;
     calc_fitness_population(population);
     global_best = find_best_fitness(population);
 
-    for (int i = 0; i < MAX_ITER; i++) {    
+    for (int i = 0; i < MAX_ITER; i++) {
         tournament_selection(population, selected_parents);
 
         mate(selected_parents, children);
         mutate(children);
-        selected_parents.clear();               
-        
-        population = move(children); 
+        selected_parents.clear();
+
+        population = move(children);
         calc_fitness_population(population);
         result = find_best_fitness(population);
         //cout << i << ' ' << global_best.fitness << ' ' << result.fitness << endl;
@@ -39,8 +39,15 @@ void GeneticScheduler::create_optimal_time_schedule() {
         case BIGGER: {global_best = result; count = 0; break; }
         }
         if (count == 20) break;
-     }
+    }
     result = global_best;
+    int *tmp = new int[nProcs];
+    for (int i = 0; i < nJobs; i++) {
+        tmp[result.schedule[i]]++;
+    }
+    for (int i = 0; i < nProcs; i++)
+        cout << tmp[i] << ' ';
+    cout << endl;
 }
 
 
@@ -56,11 +63,11 @@ int main(void) {
     int number_of_jobs;
     int number_of_processors;
     int population_size = 100;
-    
+
 
     for (int i = 0; i < number_of_tests; i++) {
         XMLDocument xmlDoc;
-        string name = "Test-" + to_string(i) + ".xml";
+        string name = "Test_files/Test-" + to_string(i) + ".xml";
         XMLError eResult = xmlDoc.LoadFile(name.c_str());
         XMLNode * pRoot = xmlDoc.FirstChild();
 
@@ -85,13 +92,13 @@ int main(void) {
         }
 
 
-        int number_of_iterations = 100 + sqrt(number_of_jobs * number_of_processors);
+        int number_of_iterations = 500 + sqrt(number_of_jobs * number_of_processors);
         GeneticScheduler GS(population_size, number_of_iterations, number_of_jobs, number_of_processors, 0.1, job_pool);
         GS.create_optimal_time_schedule();
         GS.print_result();
         job_pool.clear();
     }
     cout << "Done!\n";
-    
-	getchar();
+
+    getchar();
 }
